@@ -1,0 +1,3 @@
+rootProject.name = 'side-project'
+include 'api'
+
