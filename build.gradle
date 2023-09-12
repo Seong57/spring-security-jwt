@@ -16,6 +16,7 @@ configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
+
 }
 
 subprojects {
