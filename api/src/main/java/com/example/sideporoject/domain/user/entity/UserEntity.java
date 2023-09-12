@@ -1,6 +1,8 @@
 package com.example.sideporoject.domain.user.entity;
 
 import com.example.sideporoject.domain.user.entity.enums.UserStatus;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -34,9 +36,12 @@ public class UserEntity {
     @Column(length = 150, nullable = false)
     private String address;
 
+    @Column(name = "registered_at")
     private LocalDateTime registeredAt;
 
+    @Column(name = "unregistered_at")
     private LocalDateTime unregisteredAt;
 
+    @Column(name = "last_login_at")
     private LocalDateTime lastLoginAt;
 }
