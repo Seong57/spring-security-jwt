@@ -35,6 +35,7 @@ public class Response<T> {
         return response;
     }
 
+    // validation용 ERROR
     public static Response<Object> ERROR(Integer errorCode, String errorDescription) {
         Response<Object> response = new Response<>();
         response.result = Result.ERROR(errorCode, errorDescription);

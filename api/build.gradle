@@ -10,6 +10,12 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
+
+    // jwt
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
+
 }
 
 tasks.named('bootJar') { //빌드할 때 bootjar 파일로 하겠다는 의미

@@ -37,8 +37,11 @@ public class UserOpenApiController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(UserLoginRequest request){
+    public Response<String> login(UserLoginRequest request){
 
-        return null;
+        String token = userService.login(request);
+        return Response.OK(token);
+
+
     }
 }

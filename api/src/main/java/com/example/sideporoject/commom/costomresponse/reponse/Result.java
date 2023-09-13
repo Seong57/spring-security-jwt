@@ -34,6 +34,8 @@ public class Result {
                 ;
     }
 
+
+    // validation용 ERROR
     public static Result ERROR(
             Integer errorCode,
             String errorDescription
