@@ -31,7 +31,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                     .email(it.getEmail())
                     .password(it.getPassword())
                     .status(it.getStatus())
-                    .role(it.getUserRole())
+                    .role(it.getRole())
                     .address(it.getAddress())
                     .registeredAt(it.getRegisteredAt())
                     .unregisteredAt(it.getUnregisteredAt())
