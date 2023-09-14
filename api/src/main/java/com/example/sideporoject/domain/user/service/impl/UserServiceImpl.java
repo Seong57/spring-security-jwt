@@ -72,8 +72,10 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+
+    // userDetailsService 에서 사용될 메소드
     @Override
     public Optional<UserEntity> findByEmailWithThrow(String email) {
-        return Optional.empty();
+        return userRepository.findByEmail(email);
     }
 }
