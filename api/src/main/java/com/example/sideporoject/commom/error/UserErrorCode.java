@@ -7,7 +7,8 @@ import lombok.Getter;
 @Getter
 public enum UserErrorCode implements ErrorCodeIfs{
 
-    USER_NOT_FOUND(1400, 1400, "유저를 찾을 수 없음")
+    USER_NOT_FOUND(400, 1400, "유저를 찾을 수 없음"),
+    EXISTS_USER(400, 1401, "이미 존재하는 회원입니다."),
     ;
 
     private final Integer httpStatusCode;
