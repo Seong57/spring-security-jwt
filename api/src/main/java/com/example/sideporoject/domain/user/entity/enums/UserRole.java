@@ -11,5 +11,5 @@ public enum UserRole {
 
     ;
 
-    private String description;
+    private final String description;
 }
