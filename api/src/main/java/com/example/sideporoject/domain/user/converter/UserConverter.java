@@ -1,5 +1,7 @@
 package com.example.sideporoject.domain.user.converter;
 
+import com.example.sideporoject.commom.error.ErrorCode;
+import com.example.sideporoject.commom.exception.ApiException;
 import com.example.sideporoject.domain.user.controller.model.UserRegisterRequest;
 import com.example.sideporoject.domain.user.controller.model.UserResponse;
 import com.example.sideporoject.domain.user.entity.UserEntity;
@@ -21,6 +23,20 @@ public class UserConverter {
             })
             .orElseThrow();
 
+    }
+
+    public UserEntity toEntity(UserRegisterRequest request) {
+
+        return Optional.ofNullable(request)
+                .map(it -> {
+                    return UserEntity.builder()
+                            .name(it.getName())
+                            .email(it.getEmail())
+                            .password(it.getPassword())
+                            .address(it.getAddress())
+                            .build();
+                })
+                .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT, "userRegisterRequest is null"));
     }
 
 

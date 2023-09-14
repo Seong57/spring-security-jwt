@@ -1,5 +1,6 @@
 package com.example.sideporoject.domain.user.entity;
 
+import com.example.sideporoject.domain.user.entity.enums.UserRole;
 import com.example.sideporoject.domain.user.entity.enums.UserStatus;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -28,6 +29,10 @@ public class UserEntity {
 
     @Column(length = 100, nullable = false)
     private String password;
+
+    @Column(length = 50, nullable = false)
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 
     @Column(length = 50, nullable = false)
     @Enumerated(EnumType.STRING)

@@ -1,6 +1,7 @@
 package com.example.sideporoject.domain.user.controller;
 
 import com.example.sideporoject.commom.costomresponse.reponse.Response;
+import com.example.sideporoject.domain.token.model.TokenResponse;
 import com.example.sideporoject.domain.user.controller.model.UserLoginRequest;
 import com.example.sideporoject.domain.user.controller.model.UserRegisterRequest;
 import com.example.sideporoject.domain.user.controller.model.UserResponse;
@@ -21,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserOpenApiController {
 
     private final UserService userService;
-    private final UserConverter userConverter;
 
     @PostMapping("/register")
     public Response<UserResponse> register(
@@ -30,17 +30,16 @@ public class UserOpenApiController {
             UserRegisterRequest request
     ) {
 
-        UserEntity userEntity = userService.save(request);
-        UserResponse response = userConverter.toResponse(userEntity);
+        UserResponse response = userService.save(request);
         return Response.OK(response);
 
     }
 
     @PostMapping("/login")
-    public Response<String> login(UserLoginRequest request){
+    public Response<TokenResponse> login(UserLoginRequest request){
 
-        String token = userService.login(request);
-        return Response.OK(token);
+        TokenResponse token = userService.login(request);
+        return null; //Response.OK(token);
 
 
     }

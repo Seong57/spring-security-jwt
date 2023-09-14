@@ -1,12 +1,17 @@
 package com.example.sideporoject.domain.user.service.impl;
 
 import com.example.sideporoject.commom.error.ErrorCode;
+import com.example.sideporoject.commom.error.UserErrorCode;
 import com.example.sideporoject.commom.exception.ApiException;
 import com.example.sideporoject.domain.token.dto.TokenDto;
+import com.example.sideporoject.domain.token.model.TokenResponse;
 import com.example.sideporoject.domain.token.service.TokenService;
 import com.example.sideporoject.domain.user.controller.model.UserLoginRequest;
 import com.example.sideporoject.domain.user.controller.model.UserRegisterRequest;
+import com.example.sideporoject.domain.user.controller.model.UserResponse;
+import com.example.sideporoject.domain.user.converter.UserConverter;
 import com.example.sideporoject.domain.user.entity.UserEntity;
+import com.example.sideporoject.domain.user.entity.enums.UserRole;
 import com.example.sideporoject.domain.user.entity.enums.UserStatus;
 import com.example.sideporoject.domain.user.repository.UserRepository;
 import com.example.sideporoject.domain.user.service.UserService;
@@ -25,32 +30,37 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final TokenService tokenService;
+    private final UserConverter userConverter;
 
     @Override
-    public UserEntity save(UserRegisterRequest request) {
-        UserEntity userEntity = UserEntity.builder()
-                .name(request.getName())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .address(request.getAddress())
-                .build();
+    public UserResponse save(UserRegisterRequest request) {
 
+        boolean b = userRepository.existsByEmail(request.getEmail());
+        if (b) {
+            throw new ApiException(UserErrorCode.EXISTS_USER, "이미 존재하는 회원입니다.");
+        }
+
+        UserEntity userEntity = userConverter.toEntity(request);
+        userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
         userEntity.setRegisteredAt(LocalDateTime.now());
         userEntity.setStatus(UserStatus.REGISTERED);
+        userEntity.setRole(UserRole.USER);
 
-        return userRepository.save(userEntity);
+        userRepository.save(userEntity);
+        return userConverter.toResponse(userEntity);
     }
 
     @Override
-    public UserEntity findById(Long id) {
+    public UserResponse findByIdWithThrow(Long id) {
         UserEntity userEntity = userRepository.findById(id)
                 .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT));
 
-        return userEntity;
+        UserResponse response = userConverter.toResponse(userEntity);
+        return response;
     }
 
     @Override
-    public String login(UserLoginRequest request) {
+    public TokenResponse login(UserLoginRequest request) {
 
 
         UserEntity userEntity = userRepository.findFirstByEmailAndPasswordAndStatusOrderByIdDesc(
@@ -59,6 +69,11 @@ public class UserServiceImpl implements UserService {
 
         TokenDto tokenDto = tokenService.issueAccessToken(userEntity.getId());
 
-        return tokenDto.getToken();
+        return null;
+    }
+
+    @Override
+    public Optional<UserEntity> findByEmailWithThrow(String email) {
+        return Optional.empty();
     }
 }

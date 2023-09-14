@@ -1,29 +1,30 @@
 package com.example.sideporoject.commom.exception;
 
 import com.example.sideporoject.commom.error.ErrorCode;
+import com.example.sideporoject.commom.error.ErrorCodeIfs;
 import lombok.Getter;
 
 @Getter
 public class ApiException extends RuntimeException{
 
-    private final ErrorCode errorCode;
+    private final ErrorCodeIfs errorCodeIfs;
 
-    public ApiException(ErrorCode errorCode) {
-        this.errorCode = errorCode;
+    public ApiException(ErrorCodeIfs errorCodeIfs) {
+        this.errorCodeIfs = errorCodeIfs;
     }
 
-    public ApiException(String message, ErrorCode errorCode) {
+    public ApiException( ErrorCodeIfs errorCodeIfs,String message) {
         super(message);
-        this.errorCode = errorCode;
+        this.errorCodeIfs = errorCodeIfs;
     }
 
-    public ApiException(String message, Throwable cause, ErrorCode errorCode) {
+    public ApiException(String message, Throwable cause, ErrorCodeIfs errorCodeIfs) {
         super(message, cause);
-        this.errorCode = errorCode;
+        this.errorCodeIfs = errorCodeIfs;
     }
 
-    public ApiException(Throwable cause, ErrorCode errorCode) {
+    public ApiException(Throwable cause, ErrorCodeIfs errorCodeIfs) {
         super(cause);
-        this.errorCode = errorCode;
+        this.errorCodeIfs = errorCodeIfs;
     }
 }

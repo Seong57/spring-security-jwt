@@ -3,6 +3,7 @@ package com.example.sideporoject.commom.exhandler;
 import com.example.sideporoject.commom.costomresponse.reponse.Response;
 import com.example.sideporoject.commom.costomresponse.reponse.Result;
 import com.example.sideporoject.commom.error.ErrorCode;
+import com.example.sideporoject.commom.error.ErrorCodeIfs;
 import com.example.sideporoject.commom.exception.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
@@ -16,21 +17,18 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ApiExHandler {
 
     @ExceptionHandler(value = ApiException.class)
-    public ResponseEntity<Response<?>> apiExceptionHandler(
+    public ResponseEntity<Response<Object>> apiExceptionHandler(
             ApiException apiException
     ){
 
-        log.error("", apiException);
+        log.error("ApiExceptionHandler", apiException);
 
-        ErrorCode errorCode = apiException.getErrorCode();
+        ErrorCodeIfs errorCodeIfs = apiException.getErrorCodeIfs();
         return ResponseEntity
-                .status(errorCode.getHttpStatusCode())
+                .status(errorCodeIfs.getHttpStatusCode())
                 .body(
-                        Response.ERROR(errorCode)
+                        Response.ERROR(errorCodeIfs)
                 );
-
-
-
 
     }
 }
