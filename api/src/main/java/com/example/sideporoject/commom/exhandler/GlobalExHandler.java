@@ -4,13 +4,14 @@ import com.example.sideporoject.commom.costomresponse.reponse.Response;
 import com.example.sideporoject.commom.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@ControllerAdvice
+@RestControllerAdvice
+@Order(value = Integer.MAX_VALUE)
 @Slf4j
-@RequiredArgsConstructor
 public class GlobalExHandler {
 
     @ExceptionHandler(value = Exception.class)
