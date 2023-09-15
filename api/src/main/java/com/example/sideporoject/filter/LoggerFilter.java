@@ -5,6 +5,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.ContentCachingRequestWrapper;
+import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -17,48 +19,57 @@ public class LoggerFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
-        HttpServletRequest req = (HttpServletRequest) request;
-        HttpServletResponse res = (HttpServletResponse) response;
+        var req = new ContentCachingRequestWrapper( (HttpServletRequest) request );
+        var res = new ContentCachingResponseWrapper( (HttpServletResponse) response );
 
         log.info("INIT URI : {}", req.getRequestURI());
 
         chain.doFilter(req, res);
 
+
         // request 정보
-        Enumeration<String> headerNames = req.getHeaderNames();
-        StringBuilder headerValues = new StringBuilder();
+        var headerNames = req.getHeaderNames();
+        var headerValues = new StringBuilder();
 
-        headerNames.asIterator().forEachRemaining(key -> {
-            String headerValue = req.getHeader(key);
+        headerNames.asIterator().forEachRemaining(headerKey ->{
+            var headerValue = req.getHeader(headerKey);
 
+            // authorization-token : ??? , user-agent : ???
             headerValues
                     .append("[")
-                    .append(key)
+                    .append(headerKey)
                     .append(" : ")
                     .append(headerValue)
                     .append("] ");
         });
 
-        String requestURI = req.getRequestURI();
-        String method = req.getMethod();
+        var requestBody = new String(req.getContentAsByteArray());
+        var uri = req.getRequestURI();
+        var method = req.getMethod();
 
-        log.info(">>>>> uri : {} , method : {} , header : {}", requestURI, method, headerValues);
+        log.info(">>>>> uri : {} , method : {} , header : {} , body : {}", uri, method, headerValues, requestBody);
 
-        StringBuilder responseHeaderValues = new StringBuilder();
 
-        Collection<String> resHeaderNames = res.getHeaderNames();
+        // response 정보
+        var responseHeaderValues = new StringBuilder();
 
-        res.getHeaderNames().forEach(key -> {
-            String headerValue = res.getHeader(key);
+        res.getHeaderNames().forEach(headerKey ->{
+            var headerValue = res.getHeader(headerKey);
 
             responseHeaderValues
                     .append("[")
-                    .append(key)
+                    .append(headerKey)
                     .append(" : ")
                     .append(headerValue)
                     .append("] ");
         });
 
+        var responseBody = new String(res.getContentAsByteArray());
+
+        log.info("<<<<< uri : {} , method : {} , header : {} , body : {}", uri, method, responseHeaderValues, responseBody);
+
+
+        res.copyBodyToResponse();
 
     }
 
