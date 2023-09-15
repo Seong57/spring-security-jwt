@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserService {
     public TokenResponse  login(UserLoginRequest request) {
 
         UserEntity userEntity = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT));
+                .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT, "유저를 찾을 수 없습니다"));
         System.out.println(userEntity.getPassword());
 
         if (passwordEncoder.matches(request.getPassword(), userEntity.getPassword())) {
