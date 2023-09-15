@@ -1,12 +1,12 @@
 package com.example.sideporoject.domain.token.tokenhelper.impl;
 
+import com.example.sideporoject.commom.error.TokenErrorCode;
+import com.example.sideporoject.commom.exception.ApiException;
 import com.example.sideporoject.domain.token.dto.TokenDto;
 import com.example.sideporoject.domain.token.tokenhelper.TokenHelper;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Component
@@ -100,11 +99,11 @@ public class TokenHelperImpl implements TokenHelper {
         } catch (Exception e) {
 
             if (e instanceof SignatureException) {
-                throw new RuntimeException("로튼 인증 에러");
+                throw new ApiException(TokenErrorCode.INVALID_TOKEN);
             } else if (e instanceof ExpiredJwtException) {
-                throw new RuntimeException("토큰 만료");
+                throw new ApiException(TokenErrorCode.EXPIRED_TOKEN);
             } else {
-                throw new RuntimeException("토튼 에러", e);
+                throw new ApiException(TokenErrorCode.TOKEN_EXCEPTION, e);
             }
         }
     }
