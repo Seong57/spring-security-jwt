@@ -6,17 +6,19 @@ import com.example.sideporoject.domain.token.dto.TokenDto;
 import com.example.sideporoject.domain.token.tokenhelper.TokenHelper;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
-import java.security.SignatureException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Component
 public class TokenHelperImpl implements TokenHelper {
 
@@ -94,16 +96,19 @@ public class TokenHelperImpl implements TokenHelper {
 
         try {
             Jws<Claims> result = parser.parseClaimsJws(token);
+            log.info("Jws result : {}", result.getBody());
             return new HashMap<String, Object>(result.getBody());
 
         } catch (Exception e) {
 
             if (e instanceof SignatureException) {
-                throw new ApiException(TokenErrorCode.INVALID_TOKEN);
-            } else if (e instanceof ExpiredJwtException) {
-                throw new ApiException(TokenErrorCode.EXPIRED_TOKEN);
-            } else {
-                throw new ApiException(TokenErrorCode.TOKEN_EXCEPTION, e);
+                throw new ApiException(TokenErrorCode.INVALID_TOKEN, e);
+            }
+            else if (e instanceof ExpiredJwtException) {
+                throw new ApiException(TokenErrorCode.EXPIRED_TOKEN, e);
+            }
+            else {
+                throw new ApiException(TokenErrorCode.TOKEN_EXCEPTION);
             }
         }
     }
