@@ -35,7 +35,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter  {
 
-    private final JwtUtils jwtUtils;
+    private final TokenService tokenService;
     private final UserDetailsService userDetailsService;
 
 
@@ -64,10 +64,11 @@ public class JwtFilter extends OncePerRequestFilter  {
 
         if (authorizationToken == null) {
             log.info("authorization token이 없습니다.");
-            throw new ApiException(TokenErrorCode.AUTHORIZATION_TOKEN_NOT_FOUND);
+            filterChain.doFilter(request, response);
+            return;
         }
 
-        String userEmail = jwtUtils.validationToken(authorizationToken);
+        String userEmail = tokenService.validationToken(authorizationToken);
         log.info("userEmail : {}", userEmail);
 
 
