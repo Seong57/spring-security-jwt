@@ -20,6 +20,11 @@ public class ApiException extends RuntimeException{
         this.errorCodeIfs = errorCodeIfs;
         this.errorDescription = errorDescription;
     }
+    public ApiException(ErrorCodeIfs errorCodeIfs, Throwable cause) {
+        super(cause);
+        this.errorCodeIfs = errorCodeIfs;
+        this.errorDescription = errorCodeIfs.getErrorDescription();
+    }
 
     public ApiException(String message, ErrorCodeIfs errorCodeIfs, String errorDescription) {
         super(message);
