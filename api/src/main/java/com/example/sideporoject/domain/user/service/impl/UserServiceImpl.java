@@ -3,6 +3,7 @@ package com.example.sideporoject.domain.user.service.impl;
 import com.example.sideporoject.commom.error.ErrorCode;
 import com.example.sideporoject.commom.error.UserErrorCode;
 import com.example.sideporoject.commom.exception.ApiException;
+import com.example.sideporoject.domain.token.converter.TokenConverter;
 import com.example.sideporoject.domain.token.dto.TokenDto;
 import com.example.sideporoject.domain.token.model.TokenResponse;
 import com.example.sideporoject.domain.token.service.TokenService;
@@ -30,6 +31,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final TokenService tokenService;
+    private final TokenConverter tokenConverter;
     private final UserConverter userConverter;
 
     @Override
@@ -44,7 +46,7 @@ public class UserServiceImpl implements UserService {
         userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
         userEntity.setRegisteredAt(LocalDateTime.now());
         userEntity.setStatus(UserStatus.REGISTERED);
-        userEntity.setRole(UserRole.USER);
+        userEntity.setRole(UserRole.ROLE_USER);
 
         userRepository.save(userEntity);
         return userConverter.toResponse(userEntity);
@@ -60,16 +62,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public TokenResponse login(UserLoginRequest request) {
+    public TokenResponse  login(UserLoginRequest request) {
 
+        UserEntity userEntity = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT));
+        System.out.println(userEntity.getPassword());
 
-        UserEntity userEntity = userRepository.findFirstByEmailAndPasswordAndStatusOrderByIdDesc(
-                request.getEmail(), request.getPassword(), UserStatus.REGISTERED
-        ).orElseThrow(() -> new ApiException(ErrorCode.NULL_POINT));
+        if (passwordEncoder.matches(request.getPassword(), userEntity.getPassword())) {
+            TokenDto token = tokenService.issueAccessToken(userEntity.getEmail());
+            System.out.println(userEntity.getEmail());
+            TokenDto refreshToken = tokenService.issueRefreshToken(userEntity.getEmail());
 
-        TokenDto tokenDto = tokenService.issueAccessToken(userEntity.getId());
-
-        return null;
+            TokenResponse response = tokenConverter.toResponse(token, refreshToken);
+            return response;
+        } else {
+            throw new ApiException(ErrorCode.BAD_REQUEST, "이메일과 비밀번호를 확인해주세요");
+        }
     }
 
 
