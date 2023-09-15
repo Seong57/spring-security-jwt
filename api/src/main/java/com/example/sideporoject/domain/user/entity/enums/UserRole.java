@@ -5,9 +5,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public enum UserRole {
 
-    MASTER("마스터"),
-    MANAGER("매니저"),
-    USER("일반 유저"),
+    ROLE_MASTER("마스터"),
+    ROLE_MANAGER("매니저"),
+    ROLE_USER("일반 유저"),
 
     ;
 
