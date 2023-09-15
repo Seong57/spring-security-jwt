@@ -20,9 +20,8 @@ public class GlobalExHandler {
     ){
         log.error("", e);
 
-        return ResponseEntity.status(500)
+        return ResponseEntity
+                .status(500)
                 .body(Response.ERROR(ErrorCode.SERVER_ERROR));
     }
-
-
 }
