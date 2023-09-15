@@ -1,22 +1,19 @@
 package com.example.sideporoject.config.security;
 
 import com.example.sideporoject.domain.token.JwtUtils;
+import com.example.sideporoject.commom.exhandler.JwtAccessDeniedHandler;
+import com.example.sideporoject.config.security.entrypoint.JwtAuthenticationEntryPoint;
 import com.example.sideporoject.domain.token.service.TokenService;
-import com.example.sideporoject.domain.token.tokenhelper.TokenHelper;
-import com.example.sideporoject.domain.user.service.UserService;
 import com.example.sideporoject.filter.JwtFilter;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -27,8 +24,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtUtils jwtUtils;
+    private final TokenService tokenService;
     private final UserDetailsService userDetailsService;
+    private final ObjectMapper objectMapper;
 
     private List<String> SWAGGER = List.of(
             "/swagger-ui.html",
@@ -47,16 +45,21 @@ public class SecurityConfig {
                 .sessionManagement(config -> {
                     config.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
                 })
+                .addFilterBefore(new JwtFilter(tokenService, userDetailsService), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authorizeRequest -> {
-                    authorizeRequest.requestMatchers("/api/user/**").hasRole("USER");
-                    authorizeRequest.requestMatchers("/api/admin/**").hasRole("ADMIN");
-
+                    authorizeRequest.requestMatchers("/api/user/**").hasAnyRole("USER", "MASTER");
+                    authorizeRequest.requestMatchers("/api/admin/**").hasRole("MASTER");
                 })
-                .addFilterBefore(new JwtFilter(jwtUtils, userDetailsService), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authorizeRequest -> {
-                    authorizeRequest.requestMatchers("/open-api/**").permitAll();
+                    //authorizeRequest.requestMatchers("/open-api/**").permitAll();
                     authorizeRequest.anyRequest().permitAll();
                 })
+                .exceptionHandling(configurer -> {
+                    configurer.accessDeniedHandler(new JwtAccessDeniedHandler(objectMapper));
+                    configurer.authenticationEntryPoint(new JwtAuthenticationEntryPoint(objectMapper));
+                })
+
+
 
                 .build();
 
