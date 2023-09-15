@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
 
-    Optional<UserEntity> findFirstByEmailAndPasswordAndStatusOrderByIdDesc(
+    Optional<UserEntity> findByEmailAndPasswordAndStatusOrderByIdDesc(
             String email, String password, UserStatus status);
 
     Optional<UserEntity> findByEmail(String email);
