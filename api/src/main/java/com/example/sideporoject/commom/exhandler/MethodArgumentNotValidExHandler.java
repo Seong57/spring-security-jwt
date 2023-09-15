@@ -1,17 +1,17 @@
 package com.example.sideporoject.commom.exhandler;
 
 import com.example.sideporoject.commom.costomresponse.reponse.Response;
+import com.example.sideporoject.commom.error.ErrorCode;
+import com.example.sideporoject.commom.exception.ApiException;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -21,21 +21,22 @@ import java.util.Objects;
 
 
 @RestControllerAdvice
-@NoArgsConstructor
-@Getter
 @Slf4j
+@Order(value = 1)
 public class MethodArgumentNotValidExHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 
-        HttpStatusCode statusCode = ex.getStatusCode();
+        log.info("", ex);
+
         String defaultMessage = ex.getBindingResult().getAllErrors().get(0).getDefaultMessage();
 
         return ResponseEntity.status(status)
-                .body(
-                        Response.ERROR(statusCode.value(),defaultMessage )
-                );
+            .body(
+                    Response.ERROR(status.value(), defaultMessage)
+            );
+
     }
 
 }
