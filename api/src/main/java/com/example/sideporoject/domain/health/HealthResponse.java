@@ -1,4 +1,4 @@
-package com.example.sideporoject.domain.user.health;
+package com.example.sideporoject.domain.health;
 
 import lombok.Builder;
 import lombok.Data;
