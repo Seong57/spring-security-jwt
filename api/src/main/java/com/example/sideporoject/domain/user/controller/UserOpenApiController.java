@@ -36,10 +36,14 @@ public class UserOpenApiController {
     }
 
     @PostMapping("/login")
-    public Response<TokenResponse> login(UserLoginRequest request){
+    public Response<TokenResponse> login(
+            @RequestBody
+            @Valid
+            UserLoginRequest request
+    ){
 
         TokenResponse token = userService.login(request);
-        return null; //Response.OK(token);
+        return Response.OK(token);
 
 
     }
