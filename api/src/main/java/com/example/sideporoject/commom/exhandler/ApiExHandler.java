@@ -25,10 +25,10 @@ public class ApiExHandler {
 
         ErrorCodeIfs errorCodeIfs = apiException.getErrorCodeIfs();
         return ResponseEntity
-                .status(errorCodeIfs.getHttpStatusCode())
-                .body(
-                        Response.ERROR(errorCodeIfs)
-                );
+            .status(errorCodeIfs.getHttpStatusCode())
+            .body(
+                    Response.ERROR(errorCodeIfs.getErrorCode(), apiException.getErrorDescription())
+            );
 
     }
 }
