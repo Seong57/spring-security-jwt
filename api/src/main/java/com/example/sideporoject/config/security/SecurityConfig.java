@@ -1,6 +1,5 @@
 package com.example.sideporoject.config.security;
 
-import com.example.sideporoject.domain.token.JwtUtils;
 import com.example.sideporoject.commom.exhandler.JwtAccessDeniedHandler;
 import com.example.sideporoject.config.security.entrypoint.JwtAuthenticationEntryPoint;
 import com.example.sideporoject.domain.token.service.TokenService;
@@ -10,7 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -49,21 +50,23 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequest -> {
                     authorizeRequest.requestMatchers("/api/user/**").hasAnyRole("USER", "MASTER");
                     authorizeRequest.requestMatchers("/api/admin/**").hasRole("MASTER");
+
                 })
-                .authorizeHttpRequests(authorizeRequest -> {
-                    //authorizeRequest.requestMatchers("/open-api/**").permitAll();
+                /*.authorizeHttpRequests(authorizeRequest -> {
                     authorizeRequest.anyRequest().permitAll();
-                })
+                })*/
                 .exceptionHandling(configurer -> {
                     configurer.accessDeniedHandler(new JwtAccessDeniedHandler(objectMapper));
                     configurer.authenticationEntryPoint(new JwtAuthenticationEntryPoint(objectMapper));
                 })
-
-
-
                 .build();
 
     }
 
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web -> web.ignoring().requestMatchers("/open-api/**", "/static/**", "/swagger-ui/**", "/health/**"));
+    }
 
 }
