@@ -18,7 +18,7 @@ import java.util.List;
 public class UserDetailsImpl implements UserDetails {
 
     private Long id;
-//    private String name;
+    private String name;
     private String email;
     private String password;
     private UserRole role;
@@ -27,7 +27,6 @@ public class UserDetailsImpl implements UserDetails {
     private LocalDateTime registeredAt;
     private LocalDateTime unregisteredAt;
     private LocalDateTime lastLoginAt;
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
