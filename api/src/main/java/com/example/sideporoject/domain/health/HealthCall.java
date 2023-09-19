@@ -1,4 +1,4 @@
-package com.example.sideporoject.domain.user;
+package com.example.sideporoject.domain.health;
 
 import com.example.sideporoject.commom.costomresponse.reponse.Response;
 import com.example.sideporoject.domain.health.HealthResponse;
