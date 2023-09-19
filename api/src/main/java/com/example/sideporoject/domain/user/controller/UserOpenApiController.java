@@ -1,16 +1,13 @@
 package com.example.sideporoject.domain.user.controller;
 
 import com.example.sideporoject.commom.costomresponse.reponse.Response;
-import com.example.sideporoject.domain.token.model.TokenResponse;
+import com.example.sideporoject.security.token.model.TokenResponse;
 import com.example.sideporoject.domain.user.controller.model.UserLoginRequest;
 import com.example.sideporoject.domain.user.controller.model.UserRegisterRequest;
 import com.example.sideporoject.domain.user.controller.model.UserResponse;
-import com.example.sideporoject.domain.user.entity.UserEntity;
 import com.example.sideporoject.domain.user.service.UserService;
-import com.example.sideporoject.domain.user.converter.UserConverter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +29,6 @@ public class UserOpenApiController {
 
         UserResponse response = userService.save(request);
         return Response.OK(response);
-
     }
 
     @PostMapping("/login")
@@ -44,7 +40,5 @@ public class UserOpenApiController {
 
         TokenResponse token = userService.login(request);
         return Response.OK(token);
-
-
     }
 }
