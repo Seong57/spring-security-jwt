@@ -1,4 +1,4 @@
-package com.example.sideporoject.domain.token.dto;
+package com.example.sideporoject.security.token.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
