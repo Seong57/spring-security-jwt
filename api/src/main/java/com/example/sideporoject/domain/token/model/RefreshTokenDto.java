@@ -1,4 +1,4 @@
-package com.example.sideporoject.domain.token.dto;
+package com.example.sideporoject.domain.token.model;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
