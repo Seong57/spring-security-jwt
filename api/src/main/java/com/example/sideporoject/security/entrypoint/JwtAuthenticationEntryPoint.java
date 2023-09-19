@@ -1,4 +1,4 @@
-package com.example.sideporoject.config.security.entrypoint;
+package com.example.sideporoject.security.entrypoint;
 
 import com.example.sideporoject.commom.costomresponse.reponse.Response;
 import com.example.sideporoject.commom.error.ErrorCode;
