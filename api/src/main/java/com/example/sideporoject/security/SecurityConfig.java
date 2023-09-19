@@ -1,15 +1,15 @@
-package com.example.sideporoject.config.security;
+package com.example.sideporoject.security;
 
 import com.example.sideporoject.commom.exhandler.JwtAccessDeniedHandler;
-import com.example.sideporoject.config.security.entrypoint.JwtAuthenticationEntryPoint;
-import com.example.sideporoject.domain.token.service.TokenService;
+import com.example.sideporoject.security.entrypoint.JwtAuthenticationEntryPoint;
+import com.example.sideporoject.security.token.service.TokenService;
+import com.example.sideporoject.filter.JwtExceptionFilter;
 import com.example.sideporoject.filter.JwtFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -46,15 +46,13 @@ public class SecurityConfig {
                 .sessionManagement(config -> {
                     config.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
                 })
-                .addFilterBefore(new JwtFilter(tokenService, userDetailsService), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authorizeRequest -> {
                     authorizeRequest.requestMatchers("/api/user/**").hasAnyRole("USER", "MASTER");
                     authorizeRequest.requestMatchers("/api/admin/**").hasRole("MASTER");
-
-                })
-                /*.authorizeHttpRequests(authorizeRequest -> {
                     authorizeRequest.anyRequest().permitAll();
-                })*/
+                })
+                .addFilterBefore(new JwtFilter(tokenService, userDetailsService), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtExceptionFilter(objectMapper), JwtFilter.class)
                 .exceptionHandling(configurer -> {
                     configurer.accessDeniedHandler(new JwtAccessDeniedHandler(objectMapper));
                     configurer.authenticationEntryPoint(new JwtAuthenticationEntryPoint(objectMapper));
@@ -66,7 +64,14 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web -> web.ignoring().requestMatchers("/open-api/**", "/static/**", "/swagger-ui/**", "/health/**"));
+        return (web -> web.ignoring().requestMatchers(
+            "/open-api/**",
+            "/static/**",
+            "/health/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html",
+            "/v3/api-docs/**"
+        ));
     }
 
 }
