@@ -1,9 +1,9 @@
-package com.example.sideporoject.domain.token.tokenhelper.impl;
+package com.example.sideporoject.security.token.tokenhelper.impl;
 
 import com.example.sideporoject.commom.error.TokenErrorCode;
-import com.example.sideporoject.commom.exception.ApiException;
-import com.example.sideporoject.domain.token.dto.TokenDto;
-import com.example.sideporoject.domain.token.tokenhelper.TokenHelper;
+import com.example.sideporoject.commom.exception.JwtException;
+import com.example.sideporoject.security.token.dto.TokenDto;
+import com.example.sideporoject.security.token.tokenhelper.TokenHelper;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
@@ -102,13 +102,13 @@ public class TokenHelperImpl implements TokenHelper {
         } catch (Exception e) {
 
             if (e instanceof SignatureException) {
-                throw new ApiException(TokenErrorCode.INVALID_TOKEN, e);
+                throw new JwtException(TokenErrorCode.INVALID_TOKEN, e);
             }
             else if (e instanceof ExpiredJwtException) {
-                throw new ApiException(TokenErrorCode.EXPIRED_TOKEN, e);
+                throw new JwtException(TokenErrorCode.EXPIRED_TOKEN, e);
             }
             else {
-                throw new ApiException(TokenErrorCode.TOKEN_EXCEPTION);
+                throw new JwtException(TokenErrorCode.TOKEN_EXCEPTION, e);
             }
         }
     }

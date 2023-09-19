@@ -1,6 +1,6 @@
-package com.example.sideporoject.domain.token.tokenhelper;
+package com.example.sideporoject.security.token.tokenhelper;
 
-import com.example.sideporoject.domain.token.dto.TokenDto;
+import com.example.sideporoject.security.token.dto.TokenDto;
 
 import java.util.Map;
 
