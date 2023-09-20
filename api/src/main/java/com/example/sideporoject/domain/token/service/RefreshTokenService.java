@@ -4,20 +4,16 @@ package com.example.sideporoject.domain.token.service;
 import com.example.sideporoject.commom.error.TokenErrorCode;
 import com.example.sideporoject.commom.error.UserErrorCode;
 import com.example.sideporoject.commom.exception.ApiException;
-import com.example.sideporoject.domain.token.dto.RefreshTokenDto;
+import com.example.sideporoject.domain.token.model.RefreshTokenDto;
 import com.example.sideporoject.domain.token.entity.RefreshToken;
 import com.example.sideporoject.domain.token.repository.RefreshTokenRepository;
-import com.example.sideporoject.domain.user.controller.model.UserResponse;
 import com.example.sideporoject.domain.user.entity.UserEntity;
 import com.example.sideporoject.domain.user.repository.UserRepository;
 import com.example.sideporoject.security.token.dto.TokenDto;
-import com.example.sideporoject.security.token.model.TokenResponse;
+import com.example.sideporoject.domain.token.model.TokenResponse;
 import com.example.sideporoject.security.token.service.TokenService;
-import com.example.sideporoject.security.token.tokenhelper.TokenHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

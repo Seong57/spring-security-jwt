@@ -1,35 +1,19 @@
 package com.example.sideporoject.filter;
 
-import com.example.sideporoject.commom.error.TokenErrorCode;
-import com.example.sideporoject.commom.exception.ApiException;
-import com.example.sideporoject.domain.token.JwtUtils;
-import com.example.sideporoject.domain.token.service.TokenService;
-import com.example.sideporoject.domain.token.tokenhelper.TokenHelper;
-import com.example.sideporoject.domain.user.entity.UserEntity;
-import com.example.sideporoject.domain.user.service.UserService;
+import com.example.sideporoject.security.token.service.TokenService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.web.filter.GenericFilterBean;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -68,7 +52,7 @@ public class JwtFilter extends OncePerRequestFilter  {
             return;
         }
 
-        String userEmail = tokenService.validationToken(authorizationToken);
+        String userEmail = tokenService.validationTokenWithUserEmail(authorizationToken);
         log.info("userEmail : {}", userEmail);
 
 

@@ -1,7 +1,7 @@
 package com.example.sideporoject.domain.user.controller;
 
 import com.example.sideporoject.commom.costomresponse.reponse.Response;
-import com.example.sideporoject.security.token.model.TokenResponse;
+import com.example.sideporoject.domain.token.model.TokenResponse;
 import com.example.sideporoject.domain.user.controller.model.UserLoginRequest;
 import com.example.sideporoject.domain.user.controller.model.UserRegisterRequest;
 import com.example.sideporoject.domain.user.controller.model.UserResponse;

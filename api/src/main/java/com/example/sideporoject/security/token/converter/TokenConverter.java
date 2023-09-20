@@ -3,7 +3,7 @@ package com.example.sideporoject.security.token.converter;
 import com.example.sideporoject.commom.error.ErrorCode;
 import com.example.sideporoject.commom.exception.ApiException;
 import com.example.sideporoject.security.token.dto.TokenDto;
-import com.example.sideporoject.security.token.model.TokenResponse;
+import com.example.sideporoject.domain.token.model.TokenResponse;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;

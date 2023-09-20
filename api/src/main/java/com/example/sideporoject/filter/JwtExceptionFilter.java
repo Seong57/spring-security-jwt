@@ -1,10 +1,8 @@
 package com.example.sideporoject.filter;
 
 import com.example.sideporoject.commom.costomresponse.reponse.Response;
-import com.example.sideporoject.commom.error.ErrorCode;
 import com.example.sideporoject.commom.error.ErrorCodeIfs;
 import com.example.sideporoject.commom.error.TokenErrorCode;
-import com.example.sideporoject.commom.exception.ApiException;
 import com.example.sideporoject.commom.exception.JwtException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
@@ -13,10 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -42,7 +37,6 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
             }else if (e.getErrorCodeIfs().getErrorCode() == 2002) {
                 response(response, TokenErrorCode.TOKEN_EXCEPTION);
             }
-
         }
     }
 
